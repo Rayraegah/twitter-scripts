@@ -24,8 +24,8 @@ access_token = config.get('access', 'token')
 access_token_secret = config.get('access', 'token_secret')
 
 # Nuke My Tweets configurations
-tweets_history_preserve = config.get('tweets', 'history_preserve').split(',')
-tweets_history = config.get('tweets', 'history_file')
+likes_preserve = config.get('tweets', 'likes_preserve').split(',')
+likes = config.get('tweets', 'like_file')
 
 # Get runtime parameters
 parser = argparse.ArgumentParser(description='Nuke My Tweets v1.0.9')
@@ -49,30 +49,30 @@ api = tweepy.API(auth)
 print('OAuth successful \nloading tweets')
 
 
-with open(tweets_history, 'r') as f:
+with open(likes, 'r') as f:
     data = json.load(f)
-    tweets_list = data['tweets']
+    likes_list = data['likes']
 
-print('Begin nuke: Status')
+print('Begin nuke: Likes')
 print('=====================================')
 n = u'\u2713'
-for tweet in tweets_list:
-    tweet_id = tweet['id']
+for tweet in likes_list:
+    tweet_id = tweet['like']['tweetId']
 
     # Don't delete preserved tweets
-    if (tweet_id in tweets_history_preserve):
-        print(f'preserved tweet {tweet_id}')
+    if (tweet_id in likes_preserve):
+        print(f'preserved like {tweet_id}')
         continue
 
     # Delete the tweet
     if args.accept:
         try:
-            api.destroy_status(tweet_id)
+            api.destroy_favorite(tweet_id)
             # print("dangerously deleted tweet")
         except tweepy.error.TweepError:
             print(f'skipped operation on {tweet_id}')
 
-    print(f'deleted tweet {tweet_id} [{n}]')
+    print(f'deleted like {tweet_id} [{n}]')
 
 print('=====================================')
 print('Mission complete!')
