@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-tweepy = "3.7.0"
+tweepy = "*"
 
 [dev-packages]
 
